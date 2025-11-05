@@ -8,10 +8,39 @@ statics/user_profiles/*
 uploads/*
 
 # Logs & temp
+# Secrets & Config
+db.php
+config.php
+.env
+*.env
+
+# Python & Internal
+internal/
+__pycache__/
+*.pyc
+
+# User Uploads
+statics/user_profiles/*
+uploads/*
+!statics/user_profiles/.gitkeep
+!uploads/.gitkeep
+
+# Logs & Temp
 *.log
 temp/
 cache/
 
 # OS
 .DS_Store
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
 Thumbs.db
+# Merged .gitignore
+node_modules/
+.env
+.htaccess
+proxy.php
+delete.php
+test.html
