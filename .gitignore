@@ -1,0 +1,17 @@
+# Secrets
+db.php
+config.php
+.env
+
+# User uploads
+statics/user_profiles/*
+uploads/*
+
+# Logs & temp
+*.log
+temp/
+cache/
+
+# OS
+.DS_Store
+Thumbs.db
