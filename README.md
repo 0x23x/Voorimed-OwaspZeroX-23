@@ -16,3 +16,10 @@ cp config.example.php db.php
 # u must code your api to use
 # u must create your direcotry with default picture for your web application and directory for uploaded pictures
 ```
+# Voorimed-OwaspZeroX-23
+Simple Legacy WebApplication - Voorimed (Owasp Zero X)
+
+##  updates
+- Update DOM With JS + XMLHttpRequest (GET) (POST With Content Type Application/json)
+- PostMessage 
+- IP Behind CDN
