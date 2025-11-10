@@ -6,7 +6,6 @@ require_once "db.php";
 if (!isset($_GET['id'])) {
     die("Profile ID is required");
 }
-
 $id = $_GET['id'];
 
 // Validate ID is numeric
@@ -19,18 +18,15 @@ $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
-
 if ($result->num_rows === 0) {
     die("User not found.");
 }
-
 $user = $result->fetch_assoc();
 
 // Profile picture logic
 $profile_file = $user['profile_picture'] ?? '';
 $profiles_dir = __DIR__ . '/statics/user_profiles/';
 $server_path = $profiles_dir . $profile_file;
-
 if (!empty($profile_file) && file_exists($server_path)) {
     $display_path = 'statics/user_profiles/' . $profile_file;
 } else {
@@ -77,13 +73,11 @@ if ($api_response !== false) {
             --shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -91,7 +85,6 @@ if ($api_response !== false) {
             padding: 20px;
             color: var(--dark);
         }
-
         .container {
             max-width: 800px;
             margin: 40px auto;
@@ -100,7 +93,6 @@ if ($api_response !== false) {
             box-shadow: var(--shadow);
             overflow: hidden;
         }
-
         .profile-header {
             background: var(--primary);
             color: white;
@@ -108,7 +100,6 @@ if ($api_response !== false) {
             text-align: center;
             position: relative;
         }
-
         .profile-pic {
             width: 120px;
             height: 120px;
@@ -119,28 +110,23 @@ if ($api_response !== false) {
             margin-bottom: 1rem;
             transition: var(--transition);
         }
-
         .profile-pic:hover {
             transform: scale(1.05);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
         }
-
         .profile-name {
             font-size: 1.8rem;
             font-weight: 700;
             margin: 0 0 0.5rem 0;
         }
-
         .profile-username {
             font-size: 1.1rem;
             opacity: 0.9;
             font-weight: 500;
         }
-
         .profile-body {
             padding: 2rem;
         }
-
         .profile-bio {
             background: #f8f9ff;
             padding: 1.5rem;
@@ -152,12 +138,10 @@ if ($api_response !== false) {
             margin-bottom: 2rem;
             border: 1px solid var(--border);
         }
-
         .no-bio {
             color: #94a3b8;
             font-style: italic;
         }
-
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
@@ -167,31 +151,27 @@ if ($api_response !== false) {
             align-items: center;
             gap: 10px;
         }
-
         .section-title i {
             color: var(--primary);
         }
-
         .tweets-container {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-
         .tweet-card {
             background: #f8f9ff;
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 1.25rem;
             transition: var(--transition);
+            position: relative;
         }
-
         .tweet-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
             border-color: var(--primary-light);
         }
-
         .tweet-content {
             color: var(--dark);
             font-size: 1rem;
@@ -199,7 +179,6 @@ if ($api_response !== false) {
             margin-bottom: 0.75rem;
             word-break: break-word;
         }
-
         .tweet-meta {
             display: flex;
             justify-content: space-between;
@@ -207,11 +186,9 @@ if ($api_response !== false) {
             font-size: 0.85rem;
             color: var(--gray);
         }
-
         .tweet-date {
             font-weight: 500;
         }
-
         .no-tweets {
             text-align: center;
             padding: 2.5rem;
@@ -221,7 +198,6 @@ if ($api_response !== false) {
             border-radius: 14px;
             border: 1px dashed var(--border);
         }
-
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -237,12 +213,36 @@ if ($api_response !== false) {
             margin: 1.5rem 2rem;
             border: 1px solid var(--border);
         }
-
         .back-btn:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* === DELETE BUTTON === */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+        .delete-btn:hover {
+            background: #e74c3c;
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         @media (max-width: 640px) {
@@ -262,18 +262,21 @@ if ($api_response !== false) {
             .profile-body {
                 padding: 1.5rem;
             }
+            .delete-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="profile-header">
         <img src="<?= htmlspecialchars($display_path); ?>" alt="Profile Picture" class="profile-pic">
         <h1 class="profile-name"><?= htmlspecialchars($user['name']); ?></h1>
         <div class="profile-username">@<?= htmlspecialchars($user['username']); ?></div>
     </div>
-
     <div class="profile-body">
         <?php if (!empty($user['bio'])): ?>
             <div class="profile-bio">
@@ -285,32 +288,28 @@ if ($api_response !== false) {
             </div>
         <?php endif; ?>
 
-        <!-- Optional API Data -->
-        <!-- <?php if ($api_data): ?>
-            <div class="section-title">
-                API Info
-            </div>
-            <pre style="background:#f1f3f4;padding:1rem;border-radius:12px;font-size:0.85rem;overflow:auto;">
-<?= htmlspecialchars(json_encode($api_data, JSON_PRETTY_PRINT)); ?>
-            </pre>
-        <?php endif; ?> -->
-
         <!-- Tweets Section -->
         <div class="section-title">
             Tweets
         </div>
-
         <?php
         $tweet_stmt = $conn->prepare("SELECT * FROM tweets WHERE user_id = ? ORDER BY created_at DESC LIMIT 50");
         $tweet_stmt->bind_param("i", $id);
         $tweet_stmt->execute();
         $tweets = $tweet_stmt->get_result();
         ?>
-
         <?php if ($tweets->num_rows > 0): ?>
             <div class="tweets-container">
                 <?php while ($tweet = $tweets->fetch_assoc()): ?>
                     <div class="tweet-card">
+                        <!-- DELETE BUTTON (only for own tweets) -->
+                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $id): ?>
+                            <a href="delete.php?id=<?= $tweet['id']; ?>" 
+                               class="delete-btn" 
+                               onclick="return confirm('Are you sure you want to delete this tweet?');">
+                            </a>
+                        <?php endif; ?>
+
                         <div class="tweet-content">
                             <?= nl2br(htmlspecialchars($tweet['content'])); ?>
                         </div>
@@ -336,6 +335,5 @@ if ($api_response !== false) {
         </a>
     </div>
 </div>
-
 </body>
 </html>

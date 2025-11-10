@@ -118,4 +118,4 @@ if (!empty($errors)) {
 header('Location: panel.php');
 exit();
 
-?>  
+?>
