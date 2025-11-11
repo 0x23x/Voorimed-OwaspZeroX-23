@@ -1,5 +1,0 @@
-Allow from all
-<FilesMatch "yourdatabase.php">
-	order deny,allow
-	Deny from all
-</FilesMatch>
